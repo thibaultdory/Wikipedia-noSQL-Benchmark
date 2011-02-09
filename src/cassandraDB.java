@@ -1,3 +1,8 @@
+/**
+ * Copyright 2011 Thibault Dory
+ * Licensed under the GPL Version 3 license
+ */
+
 import java.io.UnsupportedEncodingException;
 import org.apache.cassandra.thrift.Cassandra;
 import org.apache.cassandra.thrift.Column;

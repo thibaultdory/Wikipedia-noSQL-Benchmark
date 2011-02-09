@@ -5,6 +5,11 @@ import com.basho.riak.client.response.FetchResponse;
 import com.basho.riak.client.response.MapReduceResponse;
 
 /**
+ * Copyright 2011 Thibault Dory
+ * Licensed under the GPL Version 3 license
+ */
+
+/**
  * 
  * @author Thibault Dory
  *

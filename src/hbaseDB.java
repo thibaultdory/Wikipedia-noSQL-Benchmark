@@ -1,3 +1,8 @@
+/**
+ * Copyright 2011 Thibault Dory
+ * Licensed under the GPL Version 3 license
+ */
+
 import hbase_mapreduce.MapReduceHbaseDB;
 import hbase_mapreduce.MapReduceHbaseDB.Mapper1;
 import hbase_mapreduce.MapReduceHbaseDB.Mapper2;
