@@ -13,7 +13,8 @@ import java.util.ArrayList;
 
 
 public class runBenchmark {
-
+	static int readPercentage;
+	
 	public static void main(String[] args) {
 		//Handle arguments 
 		String dbType = args[0];
@@ -29,7 +30,7 @@ public class runBenchmark {
 		
 		boolean goodInts;
 		int numberOfOperations=0;
-		int readPercentage=0;
+		readPercentage=0;
 		try{
 			numberOfOperations = Integer.decode(args[1]);
 			readPercentage = Integer.decode(args[2]);
@@ -172,8 +173,8 @@ public class runBenchmark {
 		db.connectNode(nodeList.get(0));
 		ArrayList<Double> Results = new ArrayList<Double>();
 		
-		//If you want to change the number of search run, replace 5
-		for(int i= 0; i<5;i++){
+		//Caution! Here the readPercentage is used as the number of runs for the MapReduce benchmark
+		for(int i= 0; i<readPercentage;i++){
 			long t0 = System.nanoTime();
 			//I have chosen arbitrarily to use this keyword
 			//Be carefull it is hardcoded for the HBase implementation for now
