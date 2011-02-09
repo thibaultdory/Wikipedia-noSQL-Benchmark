@@ -1,12 +1,15 @@
 Please see http://www.nosqlbenchmarking.com for more informations
 
 The easy way to use this is to import it as an existing Eclipse project. Then you will have to set the Eclipse variable to add in the classpath 
-everything needed. The versions of the databases used are :* Hadoop 0.20.2 and HBase 0.20.6
+everything needed. The versions of the databases used are :
+
+* Hadoop 0.20.2 and HBase 0.20.6
 * Cassandra 0.6.10
 * MongoDB 1.6.5 with the "java binding 2.3":https://github.com/downloads/mongodb/mongo-java-driver/mongo-2.3.jar 
 * Riak 0.14
 
 Once all the imports are working, you can make the jar file that you will use to run your tests with Eclipse :
+
 # Right click on the project on left column then select export
 # Then select Java / Runnable JAR file and click next
 # Select "runBenchmark" as launch configuration, choose an export destination and select 
