@@ -25,6 +25,10 @@ import org.apache.hadoop.mapreduce.Job;
  * 
  * @author Thibault Dory
  *
+ * Use the following commands in HBase shell to create the needed tables and column families
+ * create 'myTable', 'myColumnFamily'
+ * create 'result', 'resultF'
+ * create 'result2', 'resultF'
  */
 
 public class hbaseDB extends BenchDB{
