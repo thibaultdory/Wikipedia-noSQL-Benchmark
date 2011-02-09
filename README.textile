@@ -1,0 +1,49 @@
+Please see http://www.nosqlbenchmarking.com for more informations
+
+The easy way to use this is to import it as an existing Eclipse project. Then you will have to set the Eclipse variable to add in the classpath 
+everything needed. The versions of the databases used are :
+
+* Hadoop 0.20.2 and HBase 0.20.6
+* Cassandra 0.6.10
+* MongoDB 1.6.5 with the "java binding 2.3":https://github.com/downloads/mongodb/mongo-java-driver/mongo-2.3.jar 
+* Riak 0.14
+
+Once all the imports are working, you can make the jar file that you will use to run your tests with Eclipse :
+
+# Right click on the project on left column then select export
+# Then select Java / Runnable JAR file and click next
+# Select "runBenchmark" as launch configuration, choose an export destination and select 
+"Package required libraries into generated JAR" as library handling
+# click on Finish
+
+For Cassandra and HBase, there is a little more configuration needed. For Cassandra edit the file storage-conf.xml to reflect you 
+cluster configuration. For HBase edit the file hbase-site.xml to reflect your cluster configuration and don't forget to edit hbaseDB.java 
+to change the localisation of your configuration file on the line 39. Please note that this should be the path to the configuration file 
+on the machine on which you plan to run the jar file. 
+
+If you want to *benchmark the read and update performances* call the jarfile like this : 
+
+*java -jar jarfile.jar dbType totalNumberOp readPercentage IP1 IP2 IP3 ...*  
+
+*dbType* can currently take the following values :
+* cassandra
+* scalaris (please note that the current implementation should be optimized)
+* voldemort (no MapReduce implementation so only read/update can be benchmarked)
+* terrastore (partial implementation, needs work)
+* riak
+* mongodb
+* hbase
+
+*totalNumberOp* is the total number of operations that will be requested to the cluster. 
+*readPercentage* is the proportion of requests that will be read-only 
+*IP1 IP2 IP3 ...* is a list of IP that can be as long as desired. For the systems without a load balancer, I put in the list the IP of each 
+active node in the cluster. For systems with a load balancer, I simply put the IP of the load balancer as many time as there are active 
+nodes in the cluster. 
+
+If you want to *benchmark the MapReduce performances* , call the jar file like this : 
+
+*java -jar jarfile.jar dbType search numberOfRuns IP*  
+*dbType* can take any value listed just before provided that this database has a MapReduce implementation. 
+*search* is a constant 
+*numberOfRuns* is the number of time that the search benchmark will be run 
+*IP* is the IP of one of the nodes of the cluster that accept MapReduce jobs
