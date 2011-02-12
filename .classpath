@@ -24,5 +24,6 @@
 	<classpathentry kind="var" path="HBASE_HOME/lib/zookeeper-3.2.2.jar"/>
 	<classpathentry kind="var" path="RIAK_HOME/lib/commons-httpclient-3.1.jar"/>
 	<classpathentry kind="var" path="RIAK_HOME/lib/commons-codec-1.2.jar"/>
+	<classpathentry kind="var" path="HBASE_HOME/lib/hadoop-0.20.2-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
