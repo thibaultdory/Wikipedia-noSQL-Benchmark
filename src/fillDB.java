@@ -24,7 +24,8 @@ public class fillDB {
 		//BenchDB db = new scalarisDB();
 		//mongoDB db = new mongoDB(); 
 		//riakDB db = new riakDB();
-		hbaseDB db =  new hbaseDB();
+		BenchDB db =  new voldermortDB();
+		//hbaseDB db =  new hbaseDB();
 		int retCon = db.connectNode("192.168.0.37");
 		System.out.println("connection returned value : "+retCon);
 		if(retCon > 0){

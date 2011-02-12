@@ -3,12 +3,6 @@
  * Licensed under the GPL Version 3 license
  */
 
-/*
- * create 'myTable', 'myColumnFamily'
- * create 'result', 'resultF'
- * create 'result2', 'resultF'
- */
-
 package hbase_mapreduce;
 
 import java.io.IOException;
