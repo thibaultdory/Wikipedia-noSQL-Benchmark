@@ -32,8 +32,8 @@ public class runBenchmark {
 		int numberOfOperations=0;
 		readPercentage=0;
 		try{
-			numberOfOperations = Integer.decode(args[1]);
 			readPercentage = Integer.decode(args[2]);
+			numberOfOperations = Integer.decode(args[1]);
 			goodInts = true;
 		}catch(Exception e){
 			goodInts = false;
