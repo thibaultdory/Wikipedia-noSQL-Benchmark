@@ -20,23 +20,6 @@
 		<nature>org.maven.ide.eclipse.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>RIAK_HOME</name>
-			<type>2</type>
-			<locationURI>RIAK_HOME/bin</locationURI>
-		</link>
-		<link>
-			<name>SCALARIS_HOME</name>
-			<type>2</type>
-			<locationURI>SCALARIS_HOME/java-api/src</locationURI>
-		</link>
-		<link>
-			<name>VOLDEMORT_HOME</name>
-			<type>2</type>
-			<location>/home/inflames/Documents/INFO22/Mémoire/software/voldemort-0.81/classes</location>
-		</link>
-	</linkedResources>
 	<variableList>
 		<variable>
 			<name>CASSANDRA_HOME</name>
