@@ -9,6 +9,8 @@ import hbase_mapreduce.MapReduceHbaseDB.Mapper2;
 import hbase_mapreduce.MapReduceHbaseDB.Reducer1;
 import hbase_mapreduce.MapReduceHbaseDB.Reducer2;
 import java.io.IOException;
+import java.util.UUID;
+
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
@@ -53,7 +55,9 @@ public class hbaseDB extends BenchDB{
 	@Override
 	public String readDB(String ID) {
 		String ret;
-		Get g = new Get(Bytes.toBytes(ID));
+		//The ID is converted to a uuid for performance reasons
+		String uuid = UUID.fromString(ID).toString();
+		Get g = new Get(Bytes.toBytes(uuid));
 		try {
 			Result r = table.get(g);
 			byte [] value = r.getValue(Bytes.toBytes("myColumnFamily"),Bytes.toBytes("value"));
@@ -72,8 +76,9 @@ public class hbaseDB extends BenchDB{
 	@Override
 	public int writeDB(String ID, String Value) {
 		int ret = 0;
-		//the row is called ID
-		Put p = new Put(Bytes.toBytes(ID));
+		//the row is called ID and is converted into a UUID
+		String uuid = UUID.fromString(ID).toString();
+		Put p = new Put(Bytes.toBytes(uuid));
 		try{
 			p.add(Bytes.toBytes("myColumnFamily"), Bytes.toBytes("value"), Bytes.toBytes(Value));
 			table.put(p);
