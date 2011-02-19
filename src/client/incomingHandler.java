@@ -37,7 +37,7 @@ public class incomingHandler implements Runnable{
 				for(int i=3;i<argList.size();i++){
 					args[i] = argList.get(i);
 				}
-//				System.out.println("======= args : "+Arrays.toString(args));
+				System.out.println("======= args : "+Arrays.toString(args));
 				runBenchmark.main(args);
 				//Send the results back
 				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
