@@ -1,8 +1,13 @@
 package utils;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class Files {
 
@@ -37,5 +42,25 @@ public class Files {
 	    }
 	    return( path.delete() );
 	  }
-
+	
+	
+	static public ArrayList<String> readFileAsList(String filePath){
+		ArrayList<String> result = new ArrayList<String>();
+		
+		try {
+			FileInputStream fstream = new FileInputStream(filePath);
+			DataInputStream in = new DataInputStream(fstream);
+	        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+	        String strLine;
+	        while ((strLine = br.readLine()) != null)   {
+	            result.add(strLine);
+	          }
+	        in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+		
+	}
 }
