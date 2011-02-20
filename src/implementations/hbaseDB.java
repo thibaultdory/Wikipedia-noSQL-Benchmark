@@ -45,7 +45,7 @@ public class hbaseDB extends BenchDB{
 		int ret;
 		config = new HBaseConfiguration();
 		//You should replace this with the proper hbase configuration file
-		config.addResource("/home/alesuiss/hbase-0.20.6/conf/hbase-site.xml");
+		config.addResource("/home/alesuiss/hbase-0.90.0/conf/hbase-site.xml");
 		try {
 			table = new HTable(config, "myTable");
 			ret = 1;
