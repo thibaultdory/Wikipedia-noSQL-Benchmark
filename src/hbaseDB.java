@@ -42,7 +42,7 @@ public class hbaseDB extends BenchDB{
 		int ret;
 		config = new HBaseConfiguration();
 		//You should replace this with the proper hbase configuration file
-		config.addResource("/home/alesuiss/hbase-0.20.6/conf/hbase-site.xml");
+		//config.addResource("/home/alesuiss/hbase-0.20.6/conf/hbase-site.xml");
 		try {
 			table = new HTable(config, "myTable");
 			ret = 1;
@@ -56,8 +56,7 @@ public class hbaseDB extends BenchDB{
 	public String readDB(String ID) {
 		String ret;
 		//The ID is converted to a uuid for performance reasons
-		String uuid = UUID.fromString(ID).toString();
-		Get g = new Get(Bytes.toBytes(uuid));
+		Get g = new Get(Bytes.toBytes(ID));
 		try {
 			Result r = table.get(g);
 			byte [] value = r.getValue(Bytes.toBytes("myColumnFamily"),Bytes.toBytes("value"));
@@ -77,8 +76,7 @@ public class hbaseDB extends BenchDB{
 	public int writeDB(String ID, String Value) {
 		int ret = 0;
 		//the row is called ID and is converted into a UUID
-		String uuid = UUID.fromString(ID).toString();
-		Put p = new Put(Bytes.toBytes(uuid));
+		Put p = new Put(Bytes.toBytes(ID));
 		try{
 			p.add(Bytes.toBytes("myColumnFamily"), Bytes.toBytes("value"), Bytes.toBytes(Value));
 			table.put(p);
