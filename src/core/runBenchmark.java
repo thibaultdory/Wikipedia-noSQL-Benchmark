@@ -1,9 +1,20 @@
+package core;
 /**
  * Copyright 2011 Thibault Dory
  * Licensed under the GPL Version 3 license
  */
 
+
+import implementations.cassandraDB;
+import implementations.hbaseDB;
+import implementations.mongoDB;
+import implementations.riakDB;
+import implementations.scalarisDB;
+import implementations.terrastoreDB;
+import implementations.voldermortDB;
+
 import java.util.ArrayList;
+
 
 /**
  * Main class used to start the benchmark
@@ -14,6 +25,7 @@ import java.util.ArrayList;
 
 public class runBenchmark {
 	static int readPercentage;
+	public static ArrayList<Double> finalResults;
 	
 	public static void main(String[] args) {
 		//Handle arguments 
@@ -43,7 +55,6 @@ public class runBenchmark {
 		for(int i =3; i<args.length;i++){
 			nodeList.add(args[i]);
 		}
-		
 		//Start the benchmark if the arguments are OK
 		if(dbTypeI>=0 && goodInts){
 			ArrayList<Long> results = new ArrayList<Long>();
@@ -62,11 +73,13 @@ public class runBenchmark {
 			for(int i=0;i<results.size();i++){
 				resultsInSeconds.add(i,results.get(i)/ 1000000000.0);
 			}
+			finalResults = resultsInSeconds;
 			System.out.println("Individual times : "+resultsInSeconds);
 			
 		}else {
 			System.out.println("Starting search benchmark");
 			ArrayList<Double> res = startBenchSearch(dbTypeI,nodeList);
+			finalResults = res;
 			System.out.println("Results : "+res);
 		}
 	}

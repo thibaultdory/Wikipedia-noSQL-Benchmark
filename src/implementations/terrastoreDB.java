@@ -1,3 +1,4 @@
+package implementations;
 /**
  * Copyright 2011 Thibault Dory
  * Licensed under the GPL Version 3 license
@@ -10,6 +11,8 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
 import org.json.JSONException;
 import org.json.XML;
+
+import core.BenchDB;
 import terrastore.client.TerrastoreClient;
 import terrastore.client.connection.resteasy.HTTPConnectionFactory;
 

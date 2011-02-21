@@ -1,9 +1,12 @@
+package implementations;
 /**
  * Copyright 2011 Thibault Dory
  * Licensed under the GPL Version 3 license
  */
 
 import com.ericsson.otp.erlang.OtpConnection;
+
+import core.BenchDB;
 import de.zib.scalaris.ConnectionException;
 import de.zib.scalaris.ConnectionFactory;
 import de.zib.scalaris.Scalaris;

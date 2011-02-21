@@ -1,8 +1,10 @@
+package implementations;
 /**
  * Copyright 2011 Thibault Dory
  * Licensed under the GPL Version 3 license
  */
 
+import core.BenchDB;
 import voldemort.VoldemortException;
 import voldemort.client.ClientConfig;
 import voldemort.client.SocketStoreClientFactory;

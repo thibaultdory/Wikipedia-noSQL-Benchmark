@@ -1,3 +1,4 @@
+package implementations;
 /**
  * Copyright 2011 Thibault Dory
  * Licensed under the GPL Version 3 license
@@ -23,6 +24,8 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 
+import core.BenchDB;
+
 /**
  * 
  * @author Thibault Dory
@@ -41,8 +44,6 @@ public class hbaseDB extends BenchDB{
 	public int connectNode(String nodeAddress) {
 		int ret;
 		config = new HBaseConfiguration();
-		//You should replace this with the proper hbase configuration file
-		//config.addResource("/home/alesuiss/hbase-0.20.6/conf/hbase-site.xml");
 		try {
 			table = new HTable(config, "myTable");
 			ret = 1;

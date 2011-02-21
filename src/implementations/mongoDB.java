@@ -1,3 +1,4 @@
+package implementations;
 /**
  * Copyright 2011 Thibault Dory
  * Licensed under the GPL Version 3 license
@@ -15,6 +16,8 @@ import com.mongodb.MapReduceOutput;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 import com.mongodb.util.JSON;
+
+import core.BenchDB;
 
 /**
  * 

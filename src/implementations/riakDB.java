@@ -1,8 +1,11 @@
+package implementations;
 import com.basho.riak.client.RiakClient;
 import com.basho.riak.client.RiakObject;
 import com.basho.riak.client.request.RequestMeta;
 import com.basho.riak.client.response.FetchResponse;
 import com.basho.riak.client.response.MapReduceResponse;
+
+import core.BenchDB;
 
 /**
  * Copyright 2011 Thibault Dory

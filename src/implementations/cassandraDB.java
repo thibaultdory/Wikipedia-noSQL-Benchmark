@@ -1,3 +1,4 @@
+package implementations;
 /**
  * Copyright 2011 Thibault Dory
  * Licensed under the GPL Version 3 license
@@ -18,6 +19,8 @@ import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
+
+import core.BenchDB;
 import cassandra_mapred.MapReduceCassandraDB;
 
 /**
@@ -35,7 +38,7 @@ public class cassandraDB extends BenchDB{
     String columnFamily;
     ColumnPath colPathValue; 
     
-    cassandraDB(){
+    public cassandraDB(){
     	keyspace = "Keyspace1";
     	columnFamily = "Standard1";
     	colPathValue = new ColumnPath(columnFamily);

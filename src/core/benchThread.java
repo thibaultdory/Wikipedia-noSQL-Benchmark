@@ -1,9 +1,11 @@
+package core;
 /**
  * Copyright 2011 Thibault Dory
  * Licensed under the GPL Version 3 license
  */
 
 import java.util.Random;
+
 
 /**
  * This class does the actual job of the benchmark
