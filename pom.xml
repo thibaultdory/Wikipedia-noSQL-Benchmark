@@ -42,23 +42,7 @@
                                 <!--<mainClass>controller.benchmarkController</mainClass>-->
 				<!--<mainClass>client.benchClient</mainClass>-->
                             </transformer>
-                            <!-- Use resource transformers to prevent file overwrites -->
-                           <transformer
-			     implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                <resource>properties.properties</resource>
-                            </transformer>
-                            <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
-                                <resource>hbase-site.xml</resource>
-                            </transformer>
-                            <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                <resource>META-INF/cxf/cxf.extension</resource>
-                            </transformer>
-                            <transformer
-                                implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
-                                <resource>META-INF/cxf/bus-extensions.xml</resource>
-                            </transformer>
+                            
                      </transformers>
                     </configuration>
                 </execution>
