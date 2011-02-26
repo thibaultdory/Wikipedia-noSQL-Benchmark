@@ -10,20 +10,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>org.maven.ide.eclipse.maven2Builder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.maven.ide.eclipse.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 	<variableList>
 		<variable>
 			<name>CASSANDRA_HOME</name>
-			<value>file:/home/inflames/apache-cassandra-0.6.8</value>
+			<value>file:/home/inflames/apache-cassandra-0.7.2</value>
 		</variable>
 		<variable>
 			<name>HADOOP_HOME</name>

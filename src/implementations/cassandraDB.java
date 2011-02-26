@@ -1,120 +1,74 @@
-package implementations;
 /**
- * Copyright 2011 Thibault Dory
- * Licensed under the GPL Version 3 license
+ * create keyspace Keyspace1 with replication_factor = 1 and placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy';
+ * use Keyspace1;
+ * create column family Standard1 with column_type = 'Standard' and comparator = 'UTF8Type';
+ * create column family output_phase1 with column_type = 'Standard' and comparator = 'UTF8Type';
+ * create column family output_phase2 with column_type = 'Standard' and comparator = 'UTF8Type';
  */
 
-import java.io.UnsupportedEncodingException;
-import org.apache.cassandra.thrift.Cassandra;
+package implementations;
+
+import java.util.List;
+
 import org.apache.cassandra.thrift.Column;
-import org.apache.cassandra.thrift.ColumnPath;
 import org.apache.cassandra.thrift.ConsistencyLevel;
-import org.apache.cassandra.thrift.InvalidRequestException;
-import org.apache.cassandra.thrift.NotFoundException;
-import org.apache.cassandra.thrift.TimedOutException;
-import org.apache.cassandra.thrift.UnavailableException;
-import org.apache.thrift.TException;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
+import org.scale7.cassandra.pelops.Cluster;
+import org.scale7.cassandra.pelops.Mutator;
+import org.scale7.cassandra.pelops.Pelops;
+import org.scale7.cassandra.pelops.Selector;
+
+import cassandra_mapreduce.MapReduceCassandraDB;
 
 import core.BenchDB;
-import cassandra_mapred.MapReduceCassandraDB;
 
-/**
- * 
- * @author Thibault Dory
- *
- */
 
 public class cassandraDB extends BenchDB{
 	final String UTF8 = "UTF8";
-	TTransport tr;
-	TProtocol proto;
-	Cassandra.Client client;
-	String keyspace;
-    String columnFamily;
-    ColumnPath colPathValue; 
-    
-    public cassandraDB(){
-    	keyspace = "Keyspace1";
-    	columnFamily = "Standard1";
-    	colPathValue = new ColumnPath(columnFamily);
-    	try {
-			colPathValue.setColumn("value".getBytes(UTF8));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-    }
-	
+	String pool = "pool";
+	String keyspace = "Keyspace1";
+	String colFamily = "Standard1";
+
 	@Override
 	public int connectNode(String nodeAddress) {
-		tr = new TSocket(nodeAddress, 9160);
-        proto = new TBinaryProtocol(tr);
-        client = new Cassandra.Client(proto);
-        int ret = 1;
-        try {
-			tr.open();
-		} catch (TTransportException e) {
-			e.printStackTrace();
-			ret = -1;
+		int ret;
+		try{
+			Cluster cluster = new Cluster(nodeAddress, 9160);
+			Pelops.addPool(pool, cluster, keyspace);
+			ret = 1;
+		}catch(Exception e){
+			ret = 0;
 		}
 		return ret;
 	}
 
 	@Override
 	public String readDB(String ID) {
-		String ret;
 		try {
-			Column col = client.get(keyspace, ID, colPathValue,ConsistencyLevel.QUORUM).getColumn();
-			ret = new String(col.value, UTF8);
-		} catch (InvalidRequestException e) {
+			Selector selector = Pelops.createSelector(pool);
+			List<Column> columns = selector.getColumnsFromRow(colFamily, ID, false, ConsistencyLevel.QUORUM);
+		    return Selector.getColumnStringValue(columns, "value").toString();
+		}catch(Exception e){
 			e.printStackTrace();
-			ret = null;
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-			System.out.println(" ============== was looking for ========  "+ ID +"============");
-			ret = null;
-		} catch (UnavailableException e) {
-			e.printStackTrace();
-			ret = null;
-		} catch (TimedOutException e) {
-			e.printStackTrace();
-			ret = null;
-		} catch (TException e) {
-			e.printStackTrace();
-			ret = null;
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			ret = null;
+			return null;
 		}
-		return ret;
 	}
 
 	@Override
 	public int updateDB(String ID, String newValue) {
 		int ret;
-		long timestamp = System.currentTimeMillis();
-		try {
-			client.insert(keyspace, ID, colPathValue, newValue.getBytes(UTF8), timestamp, ConsistencyLevel.QUORUM);
-			ret = 1;
-		} catch (UnsupportedEncodingException e) {
+		try{
+		 Mutator mutator = Pelops.createMutator(pool);
+		 mutator.writeColumns(
+		         colFamily, ID,
+		         mutator.newColumnList(
+		                 mutator.newColumn("value", newValue)
+		         )
+		 );
+		mutator.execute(ConsistencyLevel.QUORUM);
+		ret = 1;
+		}catch(Exception e){
 			e.printStackTrace();
-			ret = -1;
-		} catch (InvalidRequestException e) {
-			e.printStackTrace();
-			ret = -1;
-		} catch (UnavailableException e) {
-			e.printStackTrace();
-			ret = -1;
-		} catch (TimedOutException e) {
-			e.printStackTrace();
-			ret = -1;
-		} catch (TException e) {
-			e.printStackTrace();
-			ret = -1;
+			ret = 0;
 		}
 		return ret;
 	}
@@ -123,15 +77,17 @@ public class cassandraDB extends BenchDB{
 	public int writeDB(String ID, String Value) {
 		return updateDB(ID, Value);
 	}
+
 	@Override
-	public void searchDB(String keyword){
+	public void searchDB(String keyword) {
 		//Replace this by one your Cassandra node's IP
-		String[] args = {"192.168.0.1"};
+		String[] args = {"127.0.0.1"};
 		try {
 			MapReduceCassandraDB.main(args);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 }

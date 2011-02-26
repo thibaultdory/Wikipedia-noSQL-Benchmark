@@ -1,3 +1,5 @@
+import implementations.cassandraDB;
+
 
 
 
@@ -8,9 +10,9 @@ public class test {
 	 */
 	public static void main(String[] args) {
 		
-
-		int test = 43;
-		System.out.println(test/2);
+		cassandraDB db = new cassandraDB();
+		db.connectNode("127.0.0.1");
+		System.out.println(db.readDB("345"));
 
 	}
 

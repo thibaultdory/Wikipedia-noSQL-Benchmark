@@ -44,8 +44,8 @@ public class benchThread extends Thread{
 		if(res > 0){
 			for(int i=0;i<=numberOfOperations;i++){
 				//Generate a random ID in the range of the document
-				//int ID = generator.nextInt(19580)+1;
-				int ID = generator.nextInt(2500)+1;
+				int ID = generator.nextInt(12846)+1;
+				//int ID = generator.nextInt(2500)+1;
 				String document = db.readDB(String.valueOf(ID));
 				if(document == null) System.out.println("Thread cannot read for node : "+nodeAddress);
 				//Update if randomUpdate > readPercentage to have ~readPercentage % of read only

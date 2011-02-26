@@ -137,7 +137,7 @@ public class hbaseDB extends BenchDB{
 			System.out.println("Time for the first mapreduce phase : "+firstPhaseTime+" seconds");
 			
 			double secondPhaseTime = (t1-t2)/1000000000.0;
-			System.out.println("Time for the first mapreduce phase : "+secondPhaseTime+" seconds");
+			System.out.println("Time for the second mapreduce phase : "+secondPhaseTime+" seconds");
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -8,10 +8,23 @@
   <name>Wikipedia-nosql-benchmark</name>
   <url>http://maven.apache.org</url>
   <repositories>
-   <repository> 
-    <id>clojars.org</id> 
-    <url>http://clojars.org/repo</url> 
-   </repository>
+   <repository>
+         <id>central</id>
+         <name>Maven Central Repo</name>
+         <url>http://repo1.maven.org/maven2</url>
+     </repository>
+     <repository>
+         <id>maven.scale7.org</id>
+         <name>Scale7 Maven Repo</name>
+         <url>https://github.com/s7/mvnrepo/raw/master</url>
+         <snapshots>
+           <enabled>true</enabled>
+     	 </snapshots>
+     </repository>
+     <repository> 
+         <id>clojars.org</id> 
+         <url>http://clojars.org/repo</url> 
+     </repository>
   </repositories>
   <build>
        <sourceDirectory>./src/</sourceDirectory>
@@ -37,8 +50,8 @@
                             <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                 <!-- Main class -->
-				<!--<mainClass>core.fillDB</mainClass> -->
-				<mainClass>core.runBenchmark</mainClass> 
+				<mainClass>core.runBenchmark</mainClass>
+				<!--<mainClass>core.fillDB</mainClass>-->
                                 <!--<mainClass>controller.benchmarkController</mainClass>-->
 				<!--<mainClass>client.benchClient</mainClass>-->
                             </transformer>
@@ -52,10 +65,15 @@
   </build>
   <dependencies>
     <dependency>
+     <groupId>org.scale7</groupId>
+     <artifactId>scale7-pelops</artifactId>
+     <version>1.0-RC2-0.7.x-SNAPSHOT</version>
+    </dependency>
+   <!-- <dependency>
      <artifactId>cassandra</artifactId>
      <groupId>org.apache.cassandra</groupId>
      <version>0.6.10</version>
-    </dependency>
+    </dependency>-->
     <dependency>
      <artifactId>terrastore-javaclient</artifactId>
      <groupId>terrastore-javaclient</groupId>
@@ -119,7 +137,7 @@
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
+      <version>1.2.16</version>
     </dependency>
     <dependency>
       <groupId>org.antlr</groupId>
@@ -149,12 +167,12 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.5.8</version>
+      <version>1.6.1</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.5.8</version>
+      <version>1.6.1</version>
     </dependency>
   </dependencies>
 </project>
