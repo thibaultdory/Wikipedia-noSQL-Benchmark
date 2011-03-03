@@ -96,6 +96,7 @@ public class hbaseDB extends BenchDB{
 		try {
 			//First mapreduce phase setup
 	    	HBaseConfiguration conf = config;
+	    	conf.set("mapred.job.tracker", "192.168.0.37:8021");
 	        Job job;
 			job = new Job(conf, "MapReducePhase1");
 			job.setJarByClass(MapReduceHbaseDB.class);

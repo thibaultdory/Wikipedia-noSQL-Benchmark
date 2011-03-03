@@ -1,5 +1,5 @@
 /**
- * create keyspace Keyspace1 with replication_factor = 1 and placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy';
+ * create keyspace Keyspace1 with replication_factor = 3 and placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy';
  * use Keyspace1;
  * create column family Standard1 with column_type = 'Standard' and comparator = 'UTF8Type';
  * create column family output_phase1 with column_type = 'Standard' and comparator = 'UTF8Type';
@@ -81,7 +81,7 @@ public class cassandraDB extends BenchDB{
 	@Override
 	public void searchDB(String keyword) {
 		//Replace this by one your Cassandra node's IP
-		String[] args = {"127.0.0.1"};
+		String[] args = {"192.168.0.37"};
 		try {
 			MapReduceCassandraDB.main(args);
 		} catch (Exception e) {

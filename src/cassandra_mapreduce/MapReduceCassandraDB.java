@@ -199,6 +199,7 @@ public class MapReduceCassandraDB extends Configured implements Tool
 
             String columnName = "value";
             getConf().set(CONF_COLUMN_NAME, columnName);
+            getConf().set("mapred.job.tracker", args[0]+":8021");
             Job job = new Job(getConf(), "Phase1");
             job.setJarByClass(MapReduceCassandraDB.class);
             job.setMapperClass(TokenizerMapper.class);
@@ -210,6 +211,7 @@ public class MapReduceCassandraDB extends Configured implements Tool
             
             job.setInputFormatClass(ColumnFamilyInputFormat.class);
             job.setOutputFormatClass(ColumnFamilyOutputFormat.class);
+            ConfigHelper.setRangeBatchSize(job.getConfiguration(), 800);
             ConfigHelper.setOutputColumnFamily(job.getConfiguration(), KEYSPACE, OUTPUT_COLUMN_FAMILY);
             
             ConfigHelper.setRpcPort(job.getConfiguration(), "9160");

@@ -77,7 +77,6 @@ public class MapReduceHbaseDB {
         	index += "]";
             Put put = new Put(Bytes.toBytes("results"));
             put.add(Bytes.toBytes("resultF"), Bytes.toBytes("docsID"), Bytes.toBytes(index));
-            System.out.println(key);
             context.write(key, put);
         }
     }
@@ -129,6 +128,7 @@ public class MapReduceHbaseDB {
     	
     	//First mapreduce phase setup
     	HBaseConfiguration conf = new HBaseConfiguration();
+    	conf.set("mapred.job.tracker", "192.168.0.37:8021");
         Job job = new Job(conf, "MapReducePhase1");
         job.setJarByClass(MapReduceHbaseDB.class);
         Scan scan = new Scan();
