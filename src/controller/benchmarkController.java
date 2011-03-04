@@ -3,6 +3,8 @@ package controller;
 import java.util.ArrayList;
 
 import utils.Files;
+import utils.argsTools;
+import utils.statTools;
 
 public class benchmarkController {
 
@@ -40,7 +42,7 @@ public class benchmarkController {
 			numberOfOperationsByThread = "search";
 			isSearch = true;
 		}
-		ArrayList<ArrayList<String>> dividedList = divideNodeList(nodeList, clientList.size());
+		ArrayList<ArrayList<String>> dividedList = argsTools.divideNodeList(nodeList, clientList.size());
 		clientThread t[] = new clientThread[nodeList.size()];
 		//start thread for each client
 		for(int i=0;i<clientList.size();i++){
@@ -67,22 +69,11 @@ public class benchmarkController {
 			}
 		}
 		
-		int count = 0;
-		double sum = 0;
-		for(ArrayList<Double> dArray : results){
-			for(Double d : dArray){
-				count += 1;
-				sum += d;
-			}
-		}
-		double squareSum = 0;
-		double average = sum / (double) count;
-		for(ArrayList<Double> dArray : results){
-			for(Double d : dArray){
-				squareSum += Math.pow((d - average),2);
-			}
-		}
-		double standardDeviation = Math.sqrt(squareSum / ( (double) (count -1)));
+		statTools stat = new statTools(results);
+		double average = stat.getAverage();
+		double standardDeviation = stat.getStandardDeviation();
+		
+		
 		if(isSearch){
 			System.out.println("Average time and standard deviation taken to build the search index");
 			System.out.println("Time in seconds \t Standard deviation");
@@ -94,30 +85,6 @@ public class benchmarkController {
 		}
 		
 
-	}
-	
-	static ArrayList<ArrayList<String>> divideNodeList(ArrayList<String> nodeList, int numberOfClients){
-		ArrayList<ArrayList<String>> result = new ArrayList<ArrayList<String>>();
-		int numberOfNodes = nodeList.size();
-		int low=0;
-		int up=numberOfNodes/numberOfClients;
-		
-		for(int i=0;i<numberOfClients;i++){
-			ArrayList<String> local = new ArrayList<String>();
-			for(int j=low;j<up;j++){
-				if(j<nodeList.size())
-					local.add(nodeList.get(j));
-				if(j==(nodeList.size()-(numberOfNodes%numberOfClients)-1)){
-					for(int u=1;u<=(numberOfNodes%numberOfClients);u++){
-						local.add(nodeList.get(j+u));
-					}
-				}
-			}
-			result.add(local);
-			low = up;
-			up += numberOfNodes/numberOfClients;
-		}
-		return result;
 	}
 
 }
