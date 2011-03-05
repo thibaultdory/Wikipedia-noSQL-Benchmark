@@ -50,9 +50,9 @@
                             <transformer
                                 implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                 <!-- Main class -->
-				<mainClass>core.runBenchmark</mainClass>
+				<!--<mainClass>core.runBenchmark</mainClass>-->
 				<!--<mainClass>core.fillDB</mainClass>-->
-                                <!--<mainClass>controller.benchmarkController</mainClass>-->
+                                <mainClass>controller.benchmarkController</mainClass>
 				<!--<mainClass>client.benchClient</mainClass>-->
                             </transformer>
                             

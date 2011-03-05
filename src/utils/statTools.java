@@ -12,15 +12,11 @@ public class statTools {
 	double standardDeviation;
 	
 	public statTools(ArrayList<ArrayList<Double>> results){
+		this.results = results;
 		for(ArrayList<Double> dArray : results){
 			for(Double d : dArray){
 				count += 1;
 				sum += d;
-			}
-		}
-		for(ArrayList<Double> dArray : results){
-			for(Double d : dArray){
-				squareSum += Math.pow((d - average),2);
 			}
 		}
 	}
@@ -30,10 +26,17 @@ public class statTools {
 	}
 	
 	public double getAverage(){
-		return average = sum / (double) count;
+		average = sum / (double) count;
+		return average;
 	}
 	
 	public double getStandardDeviation(){
+		getAverage();
+		for(ArrayList<Double> dArray : results){
+			for(Double d : dArray){
+				squareSum += Math.pow((d - average),2);
+			}
+		}
 		return standardDeviation = Math.sqrt(squareSum / ( (double) (count -1)));
 	}
 
