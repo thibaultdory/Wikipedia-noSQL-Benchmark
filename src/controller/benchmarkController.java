@@ -23,23 +23,29 @@ public class benchmarkController {
 		
 		//handle arguments
 		String dbType = args[0];
-		String numberOfOperations = args[1];
 		int readPercentage;
 		boolean isSearch = false;
 		boolean isElasticity = false;
+		boolean isKill = false;
 		try{
 			readPercentage = Integer.decode(args[2]);
 		}catch(Exception e){
 			readPercentage = 0;
 			if(dbType.equals("kill")){
 				System.out.println("Sending kill signal to all clients");
+				isKill = true;
 			}else{
 				e.printStackTrace();
 				System.out.println("Bad arguments");
 				System.exit(0);
 			}
 		}
-		int numberOfDocuments = Integer.decode(args[3]);
+		String numberOfOperations;
+		if(! isKill){
+			numberOfOperations = args[1];
+		}else{
+			numberOfOperations = "1";
+		}
 		try{
 			if(args[4].equals("elasticity")){
 				isElasticity = true;
@@ -59,6 +65,12 @@ public class benchmarkController {
 			isSearch = true;
 		}
 		ArrayList<ArrayList<String>> dividedList = argsTools.divideNodeList(nodeList, clientList.size());
+		int numberOfDocuments;
+		if(!isKill && !isSearch){
+			numberOfDocuments = Integer.decode(args[3]);
+		}else{
+			numberOfDocuments = 1;
+		}
 		
 		if(! isElasticity){
 			startThreads(nodeList, clientList, dbType, numberOfOperationsByThread, readPercentage, numberOfDocuments, dividedList, isSearch);
@@ -68,14 +80,16 @@ public class benchmarkController {
 			double average = stat.getAverage();
 			double standardDeviation = stat.getStandardDeviation();
 			
-			if(isSearch){
-				System.out.println("Average time and standard deviation taken to build the search index");
-				System.out.println("Time in seconds \t Standard deviation");
-				System.out.println(average + " \t "+standardDeviation);
-			}else{
-				System.out.println("Average time and standard deviation taken to complete "+numberOfOperations+" requests");
-				System.out.println("Time in seconds \t Standard deviation");
-				System.out.println(average + " \t "+standardDeviation);
+			if(!isKill){
+				if(isSearch){
+					System.out.println("Average time and standard deviation taken to build the search index");
+					System.out.println("Time in seconds \t Standard deviation");
+					System.out.println(average + " \t "+standardDeviation);
+				}else{
+					System.out.println("Average time and standard deviation taken to complete "+numberOfOperations+" requests");
+					System.out.println("Time in seconds \t Standard deviation");
+					System.out.println(average + " \t "+standardDeviation);
+				}
 			}
 		}else{
 			//Get the arguments needed for the elasticity test in the file elasticityArgs
@@ -90,7 +104,7 @@ public class benchmarkController {
 			int countInBounds = 0;
 			ArrayList<Double> intermediateResults = new ArrayList<Double>();
 			
-			while( (countInBounds < 5) && (countGlobal < maxRuns)){
+			while( (countInBounds < 6) && (countGlobal < maxRuns)){
 				//Reset the results list
 				results = new ArrayList<ArrayList<Double>>();
 				startThreads(nodeList, clientList, dbType, numberOfOperationsByThread, readPercentage, numberOfDocuments, dividedList, isSearch);
@@ -100,8 +114,12 @@ public class benchmarkController {
 				System.out.println("Run number "+countGlobal+" has a SD of "+tempSD);
 				if((tempSD >= lowerLimit) && (tempSD <= upperLimit)){
 					countInBounds += 1;
+					System.out.println("In bounds");
 				}else{
 					countInBounds = 0;
+					System.out.println("lower : "+(tempSD >= lowerLimit));
+					System.out.println("upper : "+(tempSD <= upperLimit));
+					System.out.println("Out of bounds");
 				}
 				countGlobal += 1;
 				try {

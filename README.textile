@@ -1,15 +1,16 @@
-Please see http://www.nosqlbenchmarking.com for more informations
+Please see http://www.nosqlbenchmarking.com for more informations and benchmark results
 
-You can now build this project using Maven. As a few dependencies where not available in any maven repository, I have decided to provide them myself in the lib directory. You still have to add those jar to your local maven repository, to do so execute the script addToLocalRepo.sh or execute each of the three lines that it contains. Then you only have to run "mvn package" to build the jar that contains everything needed. It will be in the folder target and it will be called "Wikipedia-nosql-benchmark-1.0-SNAPSHOT.jar". 
+You can now build this project using Maven. As a few dependencies where not available in any maven repository, I have decided to provide them myself in the lib directory. You still have to add those jar to your local maven repository, to do so execute the script addToLocalRepo.sh or execute each of the three lines that it contains. For Cassandra and HBase, there is a little more configuration needed. For Cassandra edit the file storage-conf.xml to reflect your cluster configuration. For HBase edit the file hbase-site.xml to reflect your cluster configuration.
 
-For Cassandra and HBase, there is a little more configuration needed. For Cassandra edit the file storage-conf.xml to reflect you 
-cluster configuration. For HBase edit the file hbase-site.xml to reflect your cluster configuration and don't forget to edit hbaseDB.java 
-to change the localisation of your configuration file on the line 39. Please note that this should be the path to the configuration file 
-on the machine on which you plan to run the jar file. 
+Then you only have to run "mvn package" to build the jar that contains everything needed. It will be in the folder "target" and it will be called "Wikipedia-nosql-benchmark-1.0-SNAPSHOT.jar". 
 
-If you want to *benchmark the read and update performances* call the jarfile like this : 
+You can use the jar as a single client or with a controller and several clients if you need (they are mainly usefull if the client's bandwidth is too small). You can also use this jar to insert the documents in the DBs and to measure elasticity.
 
-*java -jar jarfile.jar dbType totalNumberOp readPercentage IP1 IP2 IP3 ...*  
+h1. Fill the database 
+
+Call the jar file like this :
+
+*java -jar jarfile.jar fillDB dbType /path/to/documents/ numberOfDocuments nodeAdress firstID numberOfInsertRun* 
 
 *dbType* can currently take the following values :
 * cassandra
@@ -19,9 +20,29 @@ If you want to *benchmark the read and update performances* call the jarfile lik
 * riak
 * mongodb
 * hbase
+*/path/to/documents/* is the path to a directory that contains files named as increasing integers going from 1 to *numberOfDocuments* 
+*nodeAdress* is the IP address of a working node in the cluster that can handle writes
+*firstID* is the integer that should be used as the starting ID of the inserts, this is usefull is you already have inserted documents and want to increase the data set with the same documents but using new IDs
+*numberOfInsertRun* is the number of time you want to insert all the documents
 
+
+h1. Run the benchmark in standalone mode (only one client)
+
+To *benchmark the read and update performances* call the jarfile like this : 
+
+*java -jar jarfile.jar runBenchmark dbType totalNumberOp readPercentage numberOfDocuments IP1 IP2 IP3 ...*  
+
+*dbType* can currently take the following values :
+* cassandra
+* scalaris (please note that the current implementation should be optimized)
+* voldemort (no MapReduce implementation so only read/update can be benchmarked)
+* terrastore (partial implementation, needs work)
+* riak
+* mongodb
+* hbase
 *totalNumberOp* is the total number of operations that will be requested to the cluster. 
 *readPercentage* is the proportion of requests that will be read-only 
+*numberOfDocuments* the total number of documents already inserted in the DB
 *IP1 IP2 IP3 ...* is a list of IP that can be as long as desired. For the systems without a load balancer, I put in the list the IP of each 
 active node in the cluster. For systems with a load balancer, I simply put the IP of the load balancer as many time as there are active 
 nodes in the cluster. 
@@ -31,5 +52,39 @@ If you want to *benchmark the MapReduce performances* , call the jar file like t
 *java -jar jarfile.jar dbType search numberOfRuns IP*  
 *dbType* can take any value listed just before provided that this database has a MapReduce implementation. 
 *search* is a constant 
-*numberOfRuns* is the number of time that the search benchmark will be run 
+*numberOfRuns* is the number of time that the search benchmark will run 
 *IP* is the IP of one of the nodes of the cluster that accept MapReduce jobs
+
+*Please note that the elasticity test is only available in controller/client mode*
+
+
+h1. Run the benchmark in controller/client mode 
+
+This mode use configuration files that must be in the same directory than the jar :
+* *benchmark_clients* must contain the IP addresses of all the servers running a client, one IP per line without any blank line
+* *benchmark_nodes* must contain the IP addresses of all the servers that should be benchmarked
+* *elasticityArgs* must contain the following line if you want to use the elasticity test :
+ - the upper limit acceptable for the standard deviation on 10 runs (use a statistical test at 95% for example)
+ - the lower limit acceptable for the standard deviation on 10 runs 
+ - the number of milliseconds that must be waited for between runs
+ - the maximum number of runs 
+
+First you have to start the clients on each server that you specified in *benchmark_clients*, to do so simply run the command 
+*java -jar jarfile.jar client* on each of them.
+
+To *benchmark the read and update performances* call the jarfile like this : 
+*java -jar jarfile.jar controller dbType totalNumberOp readPercentage numberOfDocuments*
+
+Please note that the arguments are exactly the same than for the standalone client, except for the IP list that is now provided in the file *benchmark_nodes*
+
+If you want to *benchmark the MapReduce performances* , call the jar file like this : 
+*java -jar wikipedia.jar controller dbType search numberOfRuns* 
+The arguments are exactly the same than the ones for the standalone search benchmark, except for the server address that will be used. Note that the IP that will be used is the first one in the file *benchmark_nodes*
+
+If you want to *start the elasticity test* that will run until it sees 5 consecutive runs whose standard deviations are within the bounds defined by the two first lines of the file *elasticityArgs* or until it reach the maximum number of run defined in the same file. Call the jarfile like this :
+*java -jar jarfile.jar controller dbType totalNumberOp readPercentage numberOfDocuments elasticity*
+
+Finally you can kill all the clients from the controller by running the command :
+*java -jar jarfile.jar controller kill*
+
+
