@@ -1,4 +1,11 @@
 /**
+ * Copyright 2011 Thibault Dory
+ * Licensed under the GPL Version 3 license
+ */
+
+/**
+ * Use the following commands with cassandra-cli to create the needed keyspace and column families
+ * 
  * create keyspace Keyspace1 with replication_factor = 3 and placement_strategy = 'org.apache.cassandra.locator.SimpleStrategy';
  * use Keyspace1;
  * create column family Standard1 with column_type = 'Standard' and comparator = 'UTF8Type';
