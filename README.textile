@@ -20,6 +20,7 @@ Call the jar file like this :
 * riak
 * mongodb
 * hbase
+
 */path/to/documents/* is the path to a directory that contains files named as increasing integers going from 1 to *numberOfDocuments* 
 *nodeAdress* is the IP address of a working node in the cluster that can handle writes
 *firstID* is the integer that should be used as the starting ID of the inserts, this is usefull is you already have inserted documents and want to increase the data set with the same documents but using new IDs
@@ -40,6 +41,7 @@ To *benchmark the read and update performances* call the jarfile like this :
 * riak
 * mongodb
 * hbase
+
 *totalNumberOp* is the total number of operations that will be requested to the cluster. 
 *readPercentage* is the proportion of requests that will be read-only 
 *numberOfDocuments* the total number of documents already inserted in the DB
