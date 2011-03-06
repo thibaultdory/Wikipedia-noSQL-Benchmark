@@ -15,6 +15,8 @@ import implementations.voldermortDB;
 
 import java.util.ArrayList;
 
+import javax.print.attribute.standard.NumberOfDocuments;
+
 
 /**
  * Main class used to start the benchmark
@@ -50,20 +52,27 @@ public class runBenchmark {
 		}catch(Exception e){
 			goodInts = false;
 		}
+		int numberOfDocuments=0;
+		try{
+			numberOfDocuments = Integer.decode(args[3]);
+		}catch (Exception e) {
+			System.out.println("Please provide the total number of IDs");
+			System.exit(0);
+		}
 		
 		ArrayList<String> nodeList = new ArrayList<String>();
-		for(int i =3; i<args.length;i++){
+		for(int i =4; i<args.length;i++){
 			nodeList.add(args[i]);
 		}
 		//Start the benchmark if the arguments are OK
 		if(dbTypeI>=0 && goodInts){
 			ArrayList<Long> results = new ArrayList<Long>();
 			long t0 = System.nanoTime();
-			results.add(startBench(numberOfOperations,nodeList,readPercentage,dbTypeI));
+			results.add(startBench(numberOfOperations,nodeList,readPercentage,dbTypeI,numberOfDocuments));
 			int runs = 1;
 			
 			while(runs <= 9){
-				results.add(startBench(numberOfOperations,nodeList,readPercentage,dbTypeI));
+				results.add(startBench(numberOfOperations,nodeList,readPercentage,dbTypeI,numberOfDocuments));
 				runs += 1;
 			}
 			long t1 = System.nanoTime();
@@ -93,7 +102,7 @@ public class runBenchmark {
 	 * @param dbTypeI 
 	 * @return the time taken for all the thread to finish their work in nano seconds
 	 */
-	public static long startBench(int numberOfOperations, ArrayList<String> nodeList, int readPercentage, int dbTypeI){
+	public static long startBench(int numberOfOperations, ArrayList<String> nodeList, int readPercentage, int dbTypeI, int numberOfDocuments){
 		int numberOfOperationByThread = numberOfOperations/nodeList.size();
 		benchThread t[] = new benchThread[nodeList.size()];
 
@@ -129,7 +138,7 @@ public class runBenchmark {
 				break;
 			}
 			
-			t[i] = new benchThread(db, nodeList.get(i), readPercentage, numberOfOperationByThread);
+			t[i] = new benchThread(db, nodeList.get(i), readPercentage, numberOfOperationByThread, numberOfDocuments);
 			t[i].start();
 		}
 		

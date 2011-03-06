@@ -21,6 +21,7 @@ public class benchThread extends Thread{
 	String nodeAddress;
 	int readPercentage;
 	int numberOfOperations;
+	int numberOfDocuments;
 
 	/**
 	 * Constructor of the class
@@ -29,12 +30,12 @@ public class benchThread extends Thread{
 	 * @param readPercentageA is the percentage of requests that will be only reads
 	 * @param numberOfOperationsA is the total number of requests that will be made by this thread
 	 */
-	public benchThread(BenchDB dbA, String nodeAddressA, int readPercentageA, int numberOfOperationsA){
+	public benchThread(BenchDB dbA, String nodeAddressA, int readPercentageA, int numberOfOperationsA, int numberOfDocumentsA){
 		db = dbA;
 		nodeAddress = nodeAddressA;
 		readPercentage = readPercentageA;
 		numberOfOperations = numberOfOperationsA;
-		
+		numberOfDocuments = numberOfDocumentsA;
 	}
 	/**
 	 * This function is called when the thread is started
@@ -44,8 +45,7 @@ public class benchThread extends Thread{
 		if(res > 0){
 			for(int i=0;i<=numberOfOperations;i++){
 				//Generate a random ID in the range of the document
-				int ID = generator.nextInt(12846)+1;
-				//int ID = generator.nextInt(2500)+1;
+				int ID = generator.nextInt(numberOfDocuments)+1;
 				String document = db.readDB(String.valueOf(ID));
 				if(document == null) System.out.println("Thread cannot read for node : "+nodeAddress);
 				//Update if randomUpdate > readPercentage to have ~readPercentage % of read only

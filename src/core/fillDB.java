@@ -42,6 +42,8 @@ public class fillDB {
 		int numberOfInserts = Integer.decode(args[2]);
 		String nodeAdress = args[3];
 		
+		int startID = Integer.valueOf(args[4]);
+		int numberOfInsertRun = Integer.valueOf(args[5]);
 
 		BenchDB db;
 		switch(dbTypeI){
@@ -74,20 +76,26 @@ public class fillDB {
 		int retCon = db.connectNode(nodeAdress);
 		System.out.println("connection returned value : "+retCon);
 		if(retCon > 0){
-			for(int i=1;i<=numberOfInserts;i++){
-				String xml;
-				int ret;
-				try {
-					xml = Files.readFileAsString(basePath+String.valueOf(i));
-					ret = db.writeDB(String.valueOf(i), xml);
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.out.println("Cannot read file "+i);
-					ret = -1;
+			for(int j=0;j<numberOfInsertRun;j++){
+				for(int i=1;i<=numberOfInserts;i++){
+					String xml;
+					int ret;
+					try {
+						xml = Files.readFileAsString(basePath+String.valueOf(i));
+						ret = db.writeDB(String.valueOf(i+startID -1), xml);
+					} catch (IOException e) {
+						e.printStackTrace();
+						System.out.println("Cannot read file "+i);
+						ret = -1;
+					}
+					if(ret==-1){
+						System.out.println("Insert for file "+i+" failed");
+					}
+					if(i%200 == 0){
+						System.out.println(i+startID-1+" inserts done");
+					}
 				}
-				if(ret==-1) break;
-				System.out.println("Insert for file "+i+" returned value "+ret);
-				
+				startID += numberOfInserts; 
 			}
 		}
 

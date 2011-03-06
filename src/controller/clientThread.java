@@ -20,11 +20,12 @@ public class clientThread extends Thread {
 	ArrayList<String> argList = new ArrayList<String>();
 	
 	public clientThread(String host, String dbTypeArg, String numberOfOperationsArg,
-			int readPercentageArg, ArrayList<String> nodeListArg){
+			int readPercentageArg, int numberOfDocuments, ArrayList<String> nodeListArg){
 		clientHost = host;
 		argList.add(dbTypeArg);
 		argList.add(numberOfOperationsArg);
 		argList.add(String.valueOf(readPercentageArg));
+		argList.add(String.valueOf(numberOfDocuments));
 		for(int i=0;i<nodeListArg.size();i++){
 			argList.add(nodeListArg.get(i));
 		}

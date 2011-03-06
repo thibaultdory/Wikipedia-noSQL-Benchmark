@@ -35,11 +35,13 @@ public class incomingHandler implements Runnable{
 				String dbType = argList.get(0);
 				String numberOfOperations = argList.get(1);
 				String readPercentage = argList.get(2);
+				String numberOfDocuments = argList.get(3);
 				String [] args = new String [argList.size()];
 				args[0] = dbType;
 				args[1] = numberOfOperations;
 				args[2] = readPercentage;
-				for(int i=3;i<argList.size();i++){
+				args[3] = numberOfDocuments;
+				for(int i=4;i<argList.size();i++){
 					args[i] = argList.get(i);
 				}
 				System.out.println("======= args : "+Arrays.toString(args));

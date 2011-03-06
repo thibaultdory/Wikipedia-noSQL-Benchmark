@@ -39,8 +39,9 @@ public class benchmarkController {
 				System.exit(0);
 			}
 		}
+		int numberOfDocuments = Integer.decode(args[3]);
 		try{
-			if(args[3].equals("elasticity")){
+			if(args[4].equals("elasticity")){
 				isElasticity = true;
 				System.out.println("Starting elasticity test");
 			}
@@ -60,7 +61,7 @@ public class benchmarkController {
 		ArrayList<ArrayList<String>> dividedList = argsTools.divideNodeList(nodeList, clientList.size());
 		
 		if(! isElasticity){
-			startThreads(nodeList, clientList, dbType, numberOfOperationsByThread, readPercentage, dividedList, isSearch);
+			startThreads(nodeList, clientList, dbType, numberOfOperationsByThread, readPercentage, numberOfDocuments, dividedList, isSearch);
 			
 			//The threads results have been added to "results" by clientThread called by startThreads
 			statTools stat = new statTools(results);
@@ -92,7 +93,7 @@ public class benchmarkController {
 			while( (countInBounds < 5) && (countGlobal < maxRuns)){
 				//Reset the results list
 				results = new ArrayList<ArrayList<Double>>();
-				startThreads(nodeList, clientList, dbType, numberOfOperationsByThread, readPercentage, dividedList, isSearch);
+				startThreads(nodeList, clientList, dbType, numberOfOperationsByThread, readPercentage, numberOfDocuments, dividedList, isSearch);
 				statTools stat = new statTools(results);
 				double tempSD = stat.getStandardDeviation();
 				intermediateResults.add(tempSD);
@@ -122,13 +123,13 @@ public class benchmarkController {
 	}
 	
 	public static void startThreads(ArrayList<String> nodeList, ArrayList<String> clientList, String dbType, 
-			String numberOfOperationsByThread, int readPercentage, ArrayList<ArrayList<String>> dividedList,
-			boolean isSearch){
+			String numberOfOperationsByThread, int readPercentage, int numberOfDocuments, 
+			ArrayList<ArrayList<String>> dividedList, boolean isSearch){
 		
 		clientThread t[] = new clientThread[nodeList.size()];
 		//start thread for each client
 		for(int i=0;i<clientList.size();i++){
-			t[i] = new clientThread(clientList.get(i), dbType, numberOfOperationsByThread, readPercentage, dividedList.get(i));
+			t[i] = new clientThread(clientList.get(i), dbType, numberOfOperationsByThread, readPercentage, numberOfDocuments, dividedList.get(i));
 			t[i].start();
 			//One thread is enough for the search benchmark
 			if(isSearch) break;
