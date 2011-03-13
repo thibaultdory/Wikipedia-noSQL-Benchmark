@@ -24,15 +24,15 @@
 <configuration>
 <property>
     <name>hbase.rootdir</name>
-    <value>hdfs://andromeda.local/hbase</value>
+    <value>hdfs://master/hbase</value>
   </property>
   <property>
     <name>dfs.replication</name>
-    <value>1</value>
+    <value>3</value>
   </property>
   <property>
         <name>hbase.master.hostname</name>
-        <value>andromeda.local</value>
+        <value>master</value>
   </property>
 <property>
     <name>hbase.cluster.distributed</name>
@@ -44,7 +44,7 @@
   </property>
 <property>
     <name>hbase.zookeeper.quorum</name>
-    <value>andromeda.local</value>
+    <value>master</value>
     <description>Comma separated list of servers in the ZooKeeper Quorum.
     For example, "host1.mydomain.com,host2.mydomain.com,host3.mydomain.com".
     By default this is set to localhost for local and pseudo-distributed modes

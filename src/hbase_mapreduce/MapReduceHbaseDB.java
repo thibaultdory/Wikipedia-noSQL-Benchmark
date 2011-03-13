@@ -13,6 +13,7 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil;
 import org.apache.hadoop.hbase.mapreduce.TableMapper;
+import org.apache.hadoop.hbase.mapreduce.TableOutputFormat;
 import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.IntWritable;
@@ -126,48 +127,63 @@ public class MapReduceHbaseDB {
     public static void main(String[] args) throws Exception {
     	long t0 = System.nanoTime();
     	
-    	//First mapreduce phase setup
-    	HBaseConfiguration conf = new HBaseConfiguration();
-    	conf.set("mapred.job.tracker", "192.168.0.37:8021");
-        Job job = new Job(conf, "MapReducePhase1");
-        job.setJarByClass(MapReduceHbaseDB.class);
-        Scan scan = new Scan();
-        String columns = "myColumnFamily"; // comma seperated
-        scan.addColumns(columns);
-        
-        //Second mapreduce phase setup
-        HBaseConfiguration conf2 = new HBaseConfiguration();
-        Job job2 = new Job(conf2, "MapReducePhase2");
-        job2.setJarByClass(MapReduceHbaseDB.class);
-        Scan scan2 = new Scan();
-        String columns2 = "resultF"; 
-        scan2.addColumns(columns2);
-        
-        //Execution of the first mapreduce phase
-        TableMapReduceUtil.initTableMapperJob("myTable", scan, Mapper1.class, Text.class,
-                Text.class, job);
-        TableMapReduceUtil.initTableReducerJob("result", Reducer1.class, job);
-        
-        job.waitForCompletion(true);
-        
-        long t2 = System.nanoTime();
-        
-        //Execution of the second mapreduce phase
-        TableMapReduceUtil.initTableMapperJob("result", scan2, Mapper2.class, Text.class,
-                IntWritable.class, job2);
-        TableMapReduceUtil.initTableReducerJob("result2", Reducer2.class, job2);
-        
-        job2.waitForCompletion(true);
-        
-        long t1 = System.nanoTime();
-		double totalTime = (t1-t0)/1000000000.0;
-		System.out.println("Total time for the search : "+totalTime+" seconds");
-        
-		double firstPhaseTime = (t2-t0)/1000000000.0;
-		System.out.println("Time for the first mapreduce phase : "+firstPhaseTime+" seconds");
-		
-		double secondPhaseTime = (t1-t2)/1000000000.0;
-		System.out.println("Time for the first mapreduce phase : "+secondPhaseTime+" seconds");
+    	
+		try {
+			//First mapreduce phase setup
+	    	HBaseConfiguration conf = new HBaseConfiguration();
+	    	conf.set("mapred.job.tracker", args[0]+":8021");
+	        Job job;
+			job = new Job(conf, "MapReducePhase1");
+			job.setJarByClass(MapReduceHbaseDB.class);
+	        Scan scan = new Scan();
+	        String columns = "myColumnFamily";
+	        scan.addColumns(columns);
+	        scan.setCaching(10000);
+	        
+	        //Second mapreduce phase setup
+	        HBaseConfiguration conf2 = new HBaseConfiguration();
+	        Job job2 = new Job(conf2, "MapReducePhase2");
+	        job2.setJarByClass(MapReduceHbaseDB.class);
+	        Scan scan2 = new Scan();
+	        String columns2 = "resultF"; 
+	        scan2.addColumns(columns2);
+	        scan2.setCaching(10000);
+	        
+	        //Execution of the first mapreduce phase
+	        job.setOutputFormatClass(TableOutputFormat.class);
+	        TableMapReduceUtil.initTableMapperJob("myTable", scan, Mapper1.class, Text.class,
+	                Text.class, job);
+	        TableMapReduceUtil.initTableReducerJob("result", Reducer1.class, job);
+	        
+	        job.waitForCompletion(true);
+	        
+	        long t2 = System.nanoTime();
+	        
+	        //Execution of the second mapreduce phase
+	        job2.setOutputFormatClass(TableOutputFormat.class);
+	        TableMapReduceUtil.initTableMapperJob("result", scan2, Mapper2.class, Text.class,
+	                IntWritable.class, job2);
+	        TableMapReduceUtil.initTableReducerJob("result2", Reducer2.class, job2);
+	        
+	        job2.waitForCompletion(true);
+	        
+	        long t1 = System.nanoTime();
+			double totalTime = (t1-t0)/1000000000.0;
+			System.out.println("Total time for the search : "+totalTime+" seconds");
+	        
+			double firstPhaseTime = (t2-t0)/1000000000.0;
+			System.out.println("Time for the first mapreduce phase : "+firstPhaseTime+" seconds");
+			
+			double secondPhaseTime = (t1-t2)/1000000000.0;
+			System.out.println("Time for the second mapreduce phase : "+secondPhaseTime+" seconds");
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 
     }
 }

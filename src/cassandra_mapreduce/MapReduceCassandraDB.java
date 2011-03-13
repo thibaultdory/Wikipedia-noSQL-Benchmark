@@ -75,7 +75,13 @@ public class MapReduceCassandraDB extends Configured implements Tool
             IColumn column = columns.get(sourceColumn);
             if (column == null)
                 return;
-            String value = ByteBufferUtil.string(column.value());
+            String value;
+            try{
+            	value = ByteBufferUtil.string(column.value());
+            }catch(Exception e){
+            	System.out.println("crash for key : "+ByteBufferUtil.string(key));
+            	return;
+            }
             String [] words = value.split(" ");
             Text ID = new Text(ByteBufferUtil.string(key));
             for(String w : words){

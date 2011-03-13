@@ -88,7 +88,7 @@ public class cassandraDB extends BenchDB{
 	@Override
 	public void searchDB(String keyword) {
 		//Replace this by one your Cassandra node's IP
-		String[] args = {"192.168.0.37"};
+		String[] args = {"10.176.90.119"};
 		try {
 			MapReduceCassandraDB.main(args);
 		} catch (Exception e) {

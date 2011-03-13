@@ -52,16 +52,19 @@ public class runBenchmark {
 		}catch(Exception e){
 			goodInts = false;
 		}
-		int numberOfDocuments=0;
-		try{
+
+		int numberOfDocuments;
+		int startnodeL;
+		if(goodInts){
 			numberOfDocuments = Integer.decode(args[3]);
-		}catch (Exception e) {
-			System.out.println("Please provide the total number of IDs");
-			System.exit(0);
+			startnodeL = 4;
+		}else{
+			numberOfDocuments = 1;
+			startnodeL = 3;
 		}
 		
 		ArrayList<String> nodeList = new ArrayList<String>();
-		for(int i =4; i<args.length;i++){
+		for(int i =startnodeL; i<args.length;i++){
 			nodeList.add(args[i]);
 		}
 		//Start the benchmark if the arguments are OK

@@ -150,10 +150,15 @@
       <artifactId>libthrift</artifactId>
       <version>0.5.0</version>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-core</artifactId>
       <version>0.20.2</version>
+    </dependency>-->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-core</artifactId>
+      <version>0.20-append-r1056497</version>
     </dependency>
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
