@@ -51,7 +51,7 @@ public class riakDB extends BenchDB{
 		int ret;
 		try {
 			RiakObject o = new RiakObject(riak,"test",ID,newValue.getBytes("UTF8"));
-			o.store(RequestMeta.writeParams(2, 2));
+			o.store(RequestMeta.writeParams(2, 2).setQueryParam("returnbody", "false"));
 			ret = 1;
 		} catch(Exception e){
 			e.printStackTrace();
