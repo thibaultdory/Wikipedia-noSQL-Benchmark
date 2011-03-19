@@ -137,16 +137,16 @@ public class mongoDB extends BenchDB{
 									"return { count: sum };}";
 
 		//First MapReduce phase
-		MapReduceOutput tempRes = dbCol.mapReduce(map_index, reduce_index, null, null);
+		MapReduceOutput tempRes = dbCol.mapReduce(map_index, reduce_index, "tempRes1", null);
 		DBCollection outCol = tempRes.getOutputCollection();
 		//Second MapReduce phase
-		MapReduceOutput tempRes2 = outCol.mapReduce(map_relevance, reduce_relevance, null, null);
-		DBCollection outCol2 = tempRes2.getOutputCollection();
-		DBCursor cur = outCol2.find();
-		while(cur.hasNext()){
-			res.add(cur.next().toString());
-		}
-		System.out.println(res);
+		MapReduceOutput tempRes2 = outCol.mapReduce(map_relevance, reduce_relevance, "tempRes2", null);
+//		DBCollection outCol2 = tempRes2.getOutputCollection();
+//		DBCursor cur = outCol2.find();
+//		while(cur.hasNext()){
+//			res.add(cur.next().toString());
+//		}
+//		System.out.println(res);
 	}
 
 }
