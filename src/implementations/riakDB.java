@@ -81,7 +81,7 @@ public class riakDB extends BenchDB{
 		
 		MapReduceResponse tempRes = riak.mapReduce(job);
 
-		System.out.println(tempRes.getBodyAsString());
+		//System.out.println(tempRes.getBodyAsString());
 	}
 	
 
