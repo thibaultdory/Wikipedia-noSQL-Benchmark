@@ -5,10 +5,6 @@ package implementations;
  */
 
 import hbase_mapreduce.MapReduceHbaseDB;
-import hbase_mapreduce.MapReduceHbaseDB.Mapper1;
-import hbase_mapreduce.MapReduceHbaseDB.Mapper2;
-import hbase_mapreduce.MapReduceHbaseDB.Reducer1;
-import hbase_mapreduce.MapReduceHbaseDB.Reducer2;
 import java.io.IOException;
 
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -16,14 +12,7 @@ import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.hadoop.hbase.mapreduce.*;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-
-import cassandra_mapreduce.MapReduceCassandraDB;
 
 import core.BenchDB;
 
