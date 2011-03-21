@@ -48,6 +48,9 @@ public class incomingHandler implements Runnable{
 				//Send the results back
 				ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 	            oos.writeObject(runBenchmark.finalResults);
+	            oos.writeObject(runBenchmark.numberOfConnectErrors);
+	            oos.writeObject(runBenchmark.numberOfReadErrors);
+	            oos.writeObject(runBenchmark.numberOfUpdateErrors);
 	            oos.close();
 			}
             

@@ -43,7 +43,13 @@ public class clientThread extends Thread {
 			//Get the answer back
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 			ArrayList<Double> clientResult = (ArrayList<Double>) ois.readObject();
+			int connectErrors = (Integer) ois.readObject();
+			int readErrors = (Integer) ois.readObject();
+			int updateErrors = (Integer) ois.readObject();
 			benchmarkController.results.add(clientResult);
+			benchmarkController.numberOfConnectErrors += connectErrors;
+			benchmarkController.numberOfReadErrors += readErrors;
+			benchmarkController.numberOfUpdateErrors += updateErrors;
 			ois.close();
 			oos.close();
 		} catch (UnknownHostException e) {

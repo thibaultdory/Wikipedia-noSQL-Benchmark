@@ -41,28 +41,55 @@ public class benchThread extends Thread{
 	 * This function is called when the thread is started
 	 */
 	public void run(){
-		int res =  db.connectNode(nodeAddress);
-		if(res > 0){
-			for(int i=0;i<=numberOfOperations;i++){
-				//Generate a random ID in the range of the document
-				int ID = generator.nextInt(numberOfDocuments)+1;
-				String document = db.readDB(String.valueOf(ID));
-				if(document == null) System.out.println("Thread cannot read for node : "+nodeAddress);
-				//Update if randomUpdate > readPercentage to have ~readPercentage % of read only
-				int randomUpdate = generator.nextInt(100);
-				if(randomUpdate > readPercentage){
-					String newDocument = modify(document);
-					int  ret = db.updateDB(String.valueOf(ID), newDocument);
-					numberOfUpdates += 1;
-					if(ret < 0) System.out.println("Thread cannot update for node : "+nodeAddress);
-				}
-				numberOfOperationsDone += 1;
+		int countConnectErrors = 0;
+		int countReadErrors = 0;
+		int countUpdateErrors = 0;
+		while(!connect()){
+			countConnectErrors += 1;
+			System.out.println("This thread cannot connect to : "+nodeAddress+" retrying new attempt : "+countConnectErrors);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
-		} else {
-			System.out.println("This thread cannot connect to : "+nodeAddress);
 		}
-		System.out.println("the thread has done "+numberOfOperationsDone+" operations and "+numberOfUpdates+" updates");
-		
+		for(int i=0;i<=numberOfOperations;i++){
+			//Generate a random ID in the range of the document
+			int ID = generator.nextInt(numberOfDocuments)+1;
+			String document = db.readDB(String.valueOf(ID));
+			if(document == null){
+				System.out.println("Thread cannot read for node : "+nodeAddress);
+				countReadErrors += 1;
+			}
+			//Update if randomUpdate > readPercentage to have ~readPercentage % of read only
+			int randomUpdate = generator.nextInt(100);
+			if(randomUpdate > readPercentage){
+				String newDocument = modify(document);
+				int  ret = db.updateDB(String.valueOf(ID), newDocument);
+				numberOfUpdates += 1;
+				if(ret < 0){
+					System.out.println("Thread cannot update for node : "+nodeAddress);
+					countUpdateErrors += 1;
+				}
+			}
+			numberOfOperationsDone += 1;
+		}
+		System.out.println("the thread has done "+numberOfOperationsDone+" operations and "+numberOfUpdates+" updates with "+countConnectErrors+" errors");
+		runBenchmark.numberOfConnectErrors += countConnectErrors;
+		runBenchmark.numberOfReadErrors += countReadErrors;
+		runBenchmark.numberOfUpdateErrors += countUpdateErrors;
+	}
+	
+	private boolean connect(){
+		boolean ret;
+		try{
+			int res =  db.connectNode(nodeAddress);
+			if(res == 1) ret = true;
+			else ret = false;
+		}catch(Exception e){
+			ret = false;
+		}
+		return ret;
 	}
 	/**
 	 * Function used to modify the document

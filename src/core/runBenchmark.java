@@ -27,6 +27,9 @@ import javax.print.attribute.standard.NumberOfDocuments;
 
 public class runBenchmark {
 	static int readPercentage;
+	public static int numberOfConnectErrors;
+	public static int numberOfReadErrors;
+	public static int numberOfUpdateErrors;
 	public static ArrayList<Double> finalResults;
 	
 	public static void main(String[] args) {

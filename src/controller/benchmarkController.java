@@ -12,6 +12,9 @@ import utils.statTools;
 
 public class benchmarkController {
 
+	public static int numberOfConnectErrors;
+	public static int numberOfReadErrors;
+	public static int numberOfUpdateErrors;
 	public static ArrayList<ArrayList<Double>> results = new ArrayList<ArrayList<Double>>();
 
 	
@@ -82,6 +85,9 @@ public class benchmarkController {
 					System.out.println("Time in seconds \t Standard deviation");
 					System.out.println(average + " \t "+standardDeviation);
 				}else{
+					System.out.println("Number of reported errors during tests : ");
+					System.out.println("Connection error \t Read error \t Update error");
+					System.out.println(numberOfConnectErrors+"\t"+numberOfReadErrors+"\t"+numberOfUpdateErrors);
 					System.out.println("Average time and standard deviation taken to complete "+numberOfOperations+" requests");
 					System.out.println("Time in seconds \t Standard deviation");
 					System.out.println(average + " \t "+standardDeviation);
