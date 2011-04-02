@@ -96,11 +96,10 @@ public class benchmarkController {
 		}else{
 			//Get the arguments needed for the elasticity test in the file elasticityArgs
 			ArrayList<String> elastArgs = Files.readFileAsList("elasticityArgs");
-			double upperLimit = Double.valueOf(elastArgs.get(0));
-			double lowerLimit = Double.valueOf(elastArgs.get(1));
+			double maxDeltaTime = Double.valueOf(elastArgs.get(0));
 			//In milliseconds
-			int sleepTime = Integer.valueOf(elastArgs.get(2));
-			int maxRuns = Integer.valueOf(elastArgs.get(3));
+			int sleepTime = Integer.valueOf(elastArgs.get(1));
+			int maxRuns = Integer.valueOf(elastArgs.get(2));
 			//Start the elasticity test
 			int countGlobal = 0;
 			int countInBounds = 0;
@@ -111,16 +110,19 @@ public class benchmarkController {
 				results = new ArrayList<ArrayList<Double>>();
 				startThreads(nodeList, clientList, dbType, numberOfOperationsByThread, readPercentage, numberOfDocuments, dividedList, isSearch);
 				statTools stat = new statTools(results);
-				double tempSD = stat.getStandardDeviation();
-				intermediateResults.add(tempSD);
-				System.out.println("Run number "+countGlobal+" has a SD of "+tempSD);
-				if((tempSD >= lowerLimit) && (tempSD <= upperLimit)){
+				double tempAverage = stat.getAverage();
+				intermediateResults.add(tempAverage);
+				double deltaTime = 0;
+				int numberOfResults = intermediateResults.size();
+				if(numberOfResults > 1){
+					deltaTime = Math.abs(intermediateResults.get(numberOfResults-2) - intermediateResults.get(numberOfResults-1));
+				}
+				System.out.println("Run number "+countGlobal+" has an average of "+tempAverage +" and a SD of : "+stat.getStandardDeviation());
+				if(deltaTime <= maxDeltaTime){
 					countInBounds += 1;
 					System.out.println("In bounds");
 				}else{
 					countInBounds = 0;
-					System.out.println("lower : "+(tempSD >= lowerLimit));
-					System.out.println("upper : "+(tempSD <= upperLimit));
 					System.out.println("Out of bounds");
 				}
 				countGlobal += 1;
@@ -132,7 +134,7 @@ public class benchmarkController {
 			}
 			
 			System.out.println("The DB took "+countGlobal+" runs to stabilize with a sleep time of "+sleepTime+" milliseconds");
-			System.out.println("Observed standard deviations : ");
+			System.out.println("Observed average time : ");
 			System.out.println(intermediateResults);
 		}
 		

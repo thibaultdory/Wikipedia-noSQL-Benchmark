@@ -47,4 +47,9 @@ public abstract class BenchDB {
 	 * @return 
 	 */
 	public abstract void searchDB(String keyword);
+
+	/**
+	 * This function is called to clise the connection
+	 */
+	public abstract void close();
 }

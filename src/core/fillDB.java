@@ -44,6 +44,12 @@ public class fillDB {
 		
 		int startID = Integer.valueOf(args[4]);
 		int numberOfInsertRun = Integer.valueOf(args[5]);
+		int firstInsertId;
+		try{
+			firstInsertId = Integer.valueOf(args[6]);
+		}catch(Exception e){
+			firstInsertId = 0;
+		}
 
 		BenchDB db;
 		switch(dbTypeI){
@@ -77,7 +83,7 @@ public class fillDB {
 		System.out.println("connection returned value : "+retCon);
 		if(retCon > 0){
 			for(int j=0;j<numberOfInsertRun;j++){
-				for(int i=1;i<=numberOfInserts;i++){
+				for(int i=1+firstInsertId;i<=numberOfInserts;i++){
 					String xml;
 					int ret;
 					try {
