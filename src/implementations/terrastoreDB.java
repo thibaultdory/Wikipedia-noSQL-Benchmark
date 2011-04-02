@@ -85,4 +85,9 @@ public class terrastoreDB extends BenchDB{
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public void close() {
+
+	}
+
 }

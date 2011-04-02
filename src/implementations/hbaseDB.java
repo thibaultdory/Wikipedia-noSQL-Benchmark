@@ -78,6 +78,16 @@ public class hbaseDB extends BenchDB{
 		}
 		return ret;
 	}
+	
+	@Override
+	public void close(){
+		try {
+			table.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void searchDB(String keyword){
 		

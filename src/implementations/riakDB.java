@@ -83,6 +83,11 @@ public class riakDB extends BenchDB{
 
 		//System.out.println(tempRes.getBodyAsString());
 	}
+
+	@Override
+	public void close() {
+		
+	}
 	
 
 }

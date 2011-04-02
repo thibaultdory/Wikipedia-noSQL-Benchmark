@@ -82,7 +82,12 @@ public class scalarisDB extends BenchDB{
 
 	@Override
 	public void searchDB(String keyword) {
-		
+
+	}
+
+	@Override
+	public void close() {
+		conn.close();
 	}
 
 }

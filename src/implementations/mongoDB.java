@@ -106,6 +106,7 @@ public class mongoDB extends BenchDB{
 			ret = 1;
 		}catch(Exception e){
 			e.printStackTrace();
+			System.out.println("ID = "+ID+" ===============================");
 			ret = -1;
 		}
 		return ret;
@@ -147,6 +148,11 @@ public class mongoDB extends BenchDB{
 //			res.add(cur.next().toString());
 //		}
 //		System.out.println(res);
+	}
+
+	@Override
+	public void close() {
+		mdb.close();
 	}
 
 }

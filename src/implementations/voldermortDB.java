@@ -19,13 +19,13 @@ import voldemort.client.StoreClientFactory;
 
 public class voldermortDB extends BenchDB{
 	StoreClient<String, String> client;
-	
+	StoreClientFactory factory;
 	@Override
 	public int connectNode(String nodeAddress) {
 		int ret;
 		try{
 			String bootstrapUrl = "tcp://"+nodeAddress+":6666";
-			StoreClientFactory factory = new SocketStoreClientFactory(new ClientConfig().setBootstrapUrls(bootstrapUrl));
+			factory = new SocketStoreClientFactory(new ClientConfig().setBootstrapUrls(bootstrapUrl));
 	        client = factory.getStoreClient("test");
 	        ret = 1;
 		}catch(Exception e){
@@ -66,6 +66,11 @@ public class voldermortDB extends BenchDB{
 	@Override
 	public void searchDB(String keyword) {
 		// There is no MapReduce implementation in voldemort
+	}
+
+	@Override
+	public void close() {
+		factory.close();
 	}
 
 }

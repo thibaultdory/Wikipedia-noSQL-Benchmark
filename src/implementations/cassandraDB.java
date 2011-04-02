@@ -97,4 +97,10 @@ public class cassandraDB extends BenchDB{
 		
 	}
 
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+		Pelops.shutdown();
+	}
+
 }
