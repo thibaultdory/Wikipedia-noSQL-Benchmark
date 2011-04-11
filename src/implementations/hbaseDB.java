@@ -83,6 +83,7 @@ public class hbaseDB extends BenchDB{
 	public void close(){
 		try {
 			table.close();
+			System.out.println("================== Table closed ====================================================");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

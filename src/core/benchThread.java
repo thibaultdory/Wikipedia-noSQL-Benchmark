@@ -78,6 +78,7 @@ public class benchThread extends Thread{
 		runBenchmark.numberOfConnectErrors += countConnectErrors;
 		runBenchmark.numberOfReadErrors += countReadErrors;
 		runBenchmark.numberOfUpdateErrors += countUpdateErrors;
+		db.close();
 	}
 	
 	private boolean connect(){
