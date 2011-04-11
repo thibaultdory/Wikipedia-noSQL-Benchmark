@@ -35,6 +35,7 @@ public class mongoDB extends BenchDB{
 		int ret;
 		try {
 			mdb = new Mongo(nodeAddress);
+			mdb.slaveOk();
 			db = mdb.getDB("test");
 			dbCol = db.getCollection("test");
 			DBCursor cur = dbCol.find();
