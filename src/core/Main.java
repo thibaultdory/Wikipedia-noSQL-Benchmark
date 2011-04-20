@@ -27,6 +27,8 @@ public class Main {
 			benchClient.main(newArgs);
 		}else if(args[0].equals("fillDB")){
 			fillDB.main(newArgs);
+		}else if(args[0].equals("verifyAndCorrect")){
+			verifyAndCorrect.main(newArgs);
 		}
 
 	}

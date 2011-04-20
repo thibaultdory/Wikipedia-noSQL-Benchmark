@@ -11,8 +11,6 @@
 	<classpathentry kind="var" path="TERRASTORE_HOME/client/terrastore-javaclient-2.1.jar"/>
 	<classpathentry kind="var" path="CASSANDRA_HOME/lib/log4j-1.2.16.jar"/>
 	<classpathentry kind="var" path="CASSANDRA_HOME/lib/commons-cli-1.1.jar"/>
-	<classpathentry kind="var" path="VOLDEMORT_HOME/lib/jdom-1.1.jar"/>
-	<classpathentry kind="var" path="VOLDEMORT_HOME/lib/google-collect-1.0.jar"/>
 	<classpathentry kind="var" path="CASSANDRA_HOME/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="var" path="CASSANDRA_HOME/lib/slf4j-log4j12-1.6.1.jar"/>
 	<classpathentry kind="var" path="HADOOP_HOME/lib/commons-logging-1.0.4.jar"/>

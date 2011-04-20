@@ -1,10 +1,8 @@
 package core;
-/**
- * Copyright 2011 Thibault Dory
- * Licensed under the GPL Version 3 license
- */
 
+import java.io.IOException;
 
+import utils.Files;
 import implementations.cassandraDB;
 import implementations.hbaseDB;
 import implementations.mongoDB;
@@ -13,20 +11,12 @@ import implementations.scalarisDB;
 import implementations.terrastoreDB;
 import implementations.voldermortDB;
 
-import java.io.IOException;
-import utils.Files;
+public class verifyAndCorrect {
 
-/**
- * Class used to fill in the different databases with the wikipedia data
- * @author Thibault Dory
- * @version 0.1
- */
-
-public class fillDB {
-
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		
-		
 		String dbType = args[0];
 		int dbTypeI;
 		if(dbType.equals("cassandra")) dbTypeI = 0;
@@ -39,17 +29,9 @@ public class fillDB {
 		else dbTypeI = -1;
 		
 		String basePath = args[1];
-		int numberOfInserts = Integer.decode(args[2]);
-		String nodeAdress = args[3];
-		
-		int firstIDInDB = Integer.valueOf(args[4]);
-		int numberOfInsertRun = Integer.valueOf(args[5]);
-		int firstIDOnDisk;
-		try{
-			firstIDOnDisk = Integer.valueOf(args[6]);
-		}catch(Exception e){
-			firstIDOnDisk = 0;
-		}
+		int numberOfDocuments = Integer.decode(args[2]);
+		int startID = Integer.decode(args[3]);
+		String nodeAdress = args[4];
 
 		BenchDB db;
 		switch(dbTypeI){
@@ -82,31 +64,29 @@ public class fillDB {
 		int retCon = db.connectNode(nodeAdress);
 		System.out.println("connection returned value : "+retCon);
 		if(retCon > 0){
-			for(int j=0;j<numberOfInsertRun;j++){
-				for(int i=1;i<=numberOfInserts;i++){
-					String xml;
-					int ret;
-					try {
-						xml = Files.readFileAsString(basePath+String.valueOf(i+firstIDOnDisk));
-						ret = db.writeDB(String.valueOf(firstIDInDB + i), xml);
-					} catch (IOException e) {
-						e.printStackTrace();
-						System.out.println("Cannot read file "+i);
-						ret = -1;
-					}
-					if(ret==-1){
-						System.out.println("Insert for file "+firstIDInDB+i+" failed");
-					}
-					if(i%200 == 0){
-						System.out.println(firstIDInDB+i+" inserts done");
-					}
+			for(int i=1+startID;i<=numberOfDocuments;i++){
+				String xml="";
+				try {
+					xml = Files.readFileAsString(basePath+String.valueOf(i));
+				} catch (IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
 				}
-				firstIDInDB += numberOfInserts; 
+				try{
+					String ret = db.readDB(String.valueOf(i));
+					if(ret == null){
+						throw new Exception();
+					}
+					db.updateDB(String.valueOf(i), xml);
+				}catch(Exception e){
+					db.writeDB(String.valueOf(i), xml);
+					System.out.println("Corrected ID : "+i);
+				}
+				if(i%200 == 0){
+					System.out.println(i+" verifications done");
+				}
 			}
 		}
-
 	}
-	
-	
 
 }

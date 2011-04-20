@@ -58,7 +58,7 @@ public class benchThread extends Thread{
 			int ID = generator.nextInt(numberOfDocuments)+1;
 			String document = db.readDB(String.valueOf(ID));
 			if(document == null){
-				System.out.println("Thread cannot read for node : "+nodeAddress);
+				System.out.println("Thread cannot read ID : "+ID+"for node : "+nodeAddress);
 				countReadErrors += 1;
 			}
 			//Update if randomUpdate > readPercentage to have ~readPercentage % of read only
@@ -79,6 +79,7 @@ public class benchThread extends Thread{
 		runBenchmark.numberOfReadErrors += countReadErrors;
 		runBenchmark.numberOfUpdateErrors += countUpdateErrors;
 		db.close();
+		return;
 	}
 	
 	private boolean connect(){
