@@ -46,7 +46,6 @@ public class hbaseDB extends BenchDB{
 	@Override
 	public String readDB(String ID) {
 		String ret;
-		//The ID is converted to a uuid for performance reasons
 		Get g = new Get(Bytes.toBytes(ID));
 		try {
 			Result r = table.get(g);
@@ -66,7 +65,6 @@ public class hbaseDB extends BenchDB{
 	@Override
 	public int writeDB(String ID, String Value) {
 		int ret = 0;
-		//the row is called ID and is converted into a UUID
 		Put p = new Put(Bytes.toBytes(ID));
 		try{
 			p.add(Bytes.toBytes("myColumnFamily"), Bytes.toBytes("value"), Bytes.toBytes(Value));
@@ -84,6 +82,7 @@ public class hbaseDB extends BenchDB{
 		try {
 			table.close();
 			System.out.println("================== Table closed ====================================================");
+			config.clear();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

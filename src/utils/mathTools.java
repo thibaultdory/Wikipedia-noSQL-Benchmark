@@ -10,8 +10,8 @@ public class mathTools {
 		
 		for(int i=0;i<average.size()-1;i++){
 			double rectangle = (time.get(i+1) - time.get(i))*Math.max(average.get(i), average.get(i+1));
-			double triangle = Math.abs(average.get(i)-average.get(i+1))*(time.get(i+1) - time.get(i))/2;
-			FullIntegral += rectangle - triangle;
+			double triangleUp = Math.abs(average.get(i)-average.get(i+1))*(time.get(i+1) - time.get(i))/2;
+			FullIntegral += rectangle - triangleUp;
 		}
 		
 		return FullIntegral;
